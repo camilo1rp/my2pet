@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from .serializers import UserSerializer, ClientSerializer, ProductSerializer
 from categories.models import Category
 
+from products.models import Product
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -51,6 +53,30 @@ class ClientGetViewSet(viewsets.ModelViewSet):
             info['email'] = user.email
             info['birth'] = user.client.dob
             info['active'] = user.is_active
+            value_data.append(info)
+        value = [value1, value_data]
+        return JsonResponse(value, safe=False)
+
+
+class ProducGetViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        print(' ----  list Products ---- ')
+        products = Product.objects.exclude(is_staff=True).order_by('-is_active', '-date_joined')
+        value_data = []
+        value1 = ["name", "reference", "price", "tipo identificacion", "numero identificacion",
+                  "address", "email", "fecha de nacimiento", "editar", "estado"]
+        for product in products:
+            info = {}
+            info['id'] = product.id
+            info['name'] = product.first_name
+            info['reference'] = product.last_name
+            info['price'] = product.client.phone
+            info['category'] = product.client.id_type
+            info['available'] = product.client.id_number
+            info['delivery'] = product.client.address
+            info['discount'] = product.email
+            info['description'] = product.client.dob
+            info['active'] = product.is_active
             value_data.append(info)
         value = [value1, value_data]
         return JsonResponse(value, safe=False)
