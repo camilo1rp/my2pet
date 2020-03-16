@@ -12,7 +12,7 @@ class Product(models.Model):
     available = models.BooleanField(default=False)
     delivery = models.BooleanField(default=False)
     #image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
-    discount = models.IntegerField()
+    discount = models.CharField(max_length=20)
     description = models.TextField(max_length=500, null=True, blank=True)
     #quantity = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
@@ -31,7 +31,7 @@ class Product(models.Model):
             while code_gen in [pro.code for pro in Product.objects.all()]:
                 code_gen = self.codi()
             self.code = code_gen
-        if self.quantity < 1:
-            self.available = False
+        # if self.quantity < 1:
+        #     self.available = False
         super(Product, self).save(*args, **kwargs)
 

@@ -20,5 +20,5 @@ class ClientSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('name', 'reference', 'price', 'category', 'available', 'discount', 'delivery', 'available')
+        fields = ('name', 'reference', 'price', 'available', 'discount', 'delivery', 'available') # category missing
 

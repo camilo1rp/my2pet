@@ -59,7 +59,7 @@ class ClientGetViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         if request.method == 'GET':
-            print("****request client*****")
+            print("****request product*****")
             product_id = request.GET.get('idProduct')
             name = request.GET.get('name')
             reference = request.GET.get('reference')
@@ -69,7 +69,8 @@ class ProductViewSet(viewsets.ModelViewSet):
             delivery = request.GET.get('delivery')
             discount = request.GET.get('discount')
             description = request.GET.get('description')
-
+            print('product_id')
+            print(product_id)
             if product_id:
                 # user = User.objects.get(id=user_id)
                 # if delete:
@@ -89,10 +90,12 @@ class ProductViewSet(viewsets.ModelViewSet):
                 return JsonResponse('Actualizado Exitosamente', safe=False)
             else:
                 serializer = ProductSerializer(data={'name': name, 'reference': reference,
-                                                     'price': price, 'category': category,
-                                                     'available': available, 'delivery': delivery,
+                                                     'price': price, #'category': category,
+                                                     'available': True, 'delivery': True,
                                                      'discount': discount, 'description': description,
                                                      })
+                print("Serializer is valid:")
+                print(serializer.is_valid())
                 if serializer.is_valid():
                     prod = serializer.save()
                     print("product saved")
