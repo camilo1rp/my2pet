@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ubicacion.models import Barrio
+from products.models import Product, ProductDetails
 
 
 class Address(models.Model):
@@ -11,7 +12,6 @@ class Address(models.Model):
 class Branch(models.Model):
     name = models.CharField(max_length=15)
     address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True, related_name='branch')
-    #product = models.ManyToManyField('Product', related_name='branches', verbose_name=_('product'))
+    products = models.ManyToManyField(Product, through=ProductDetails, verbose_name=_('product'))
     #service = models.ManyToManyField('Service', related_name='branches', verbose_name=_('service'))
-
 

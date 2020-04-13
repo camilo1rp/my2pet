@@ -24,7 +24,7 @@ SECRET_KEY = 'sow=7*nw%4*#di8m)6bwn1eri3gup_ewhvzixdq=2293b!wy%v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -35,15 +35,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apis
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
     'ubicacion.apps.UbicacionConfig',
     'apis',
     'branches',
     'profiles',
     'categories',
     'products',
-    # Apis
-    'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -87,13 +88,13 @@ CORS_ALLOW_METHODS = (
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Django rest framework
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
-    'DATETIME_FORMAT': "% m /% d /% Y% H:% M:% S",
-}
+# # Django rest framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': (
+#         'rest_framework.renderers.JSONRenderer',
+#     ),
+#     'DATETIME_FORMAT': "% m /% d /% Y% H:% M:% S",
+# }
 
 WSGI_APPLICATION = 'my2pet.wsgi.application'
 

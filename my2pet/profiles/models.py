@@ -48,9 +48,9 @@ class Client(models.Model):
     dob = models.CharField(max_length=20, default='', blank=True)
     address = models.CharField( max_length=100, default='', blank=True)
     id_type = models.CharField( max_length=100, default='', blank=True)
-    id_number = models.IntegerField(blank=True)
-    phone = models.BigIntegerField(blank=True)
-    is_client = models.BooleanField(default=False)
+    id_number = models.IntegerField(blank=True, null=True)
+    phone = models.BigIntegerField(blank=True, null=True)
+    is_client = models.BooleanField(default=False, null=True)
 
 @receiver(post_save, sender=User)
 def create_user_client(sender, instance, created, **kwargs):

@@ -1,7 +1,7 @@
-
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from categories.models import Category
 from products.models import Product
 
 
@@ -17,8 +17,19 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = ('username', 'password', 'email', 'first_name', 'last_name')
 
 
-class ProductSerializer(serializers.ModelSerializer):
+# class ProductSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Product
+#         fields = ('name', 'reference', 'price', 'available', 'discount', 'delivery', 'available')  # category missing
+
+
+class ProductsSerializer(serializers.ModelSerializer):
+    # category = serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     queryset=Category.objects.all()
+    # )
+
     class Meta:
         model = Product
-        fields = ('name', 'reference', 'price', 'available', 'discount', 'delivery', 'available') # category missing
+        fields = ('name', 'price', 'reference', 'description')
 
