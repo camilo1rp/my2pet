@@ -188,9 +188,9 @@ class ProductsViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
 
     def create(self, request, *args, **kwargs):
-        response = super(ProductsViewSet, self).create(request, *args, **kwargs)
-        response.data['message'] = "producto ha sido creado"
-        return response
+        # response = super(ProductsViewSet, self).create(request, *args, **kwargs)
+        # response.data['message'] = "producto ha sido creado"
+        return JsonResponse('Creado Exitosamente', safe=False)
 
     def perform_create(self, serializer):
         """Create new product"""
