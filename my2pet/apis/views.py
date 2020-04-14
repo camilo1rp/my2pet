@@ -7,7 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 from my2pet.helpers import code
-from .serializers import UserSerializer, ClientSerializer, ProductsSerializer
+from providers.models import Provider
+from .serializers import UserSerializer, ClientSerializer, ProductSerializer, CategorySerializer, ProviderSerializer
 from categories.models import Category
 
 from products.models import Product
@@ -60,6 +61,8 @@ class ClientGetViewSet(viewsets.ModelViewSet):
             value_data.append(info)
         value = [value1, value_data]
         return JsonResponse(value, safe=False)
+
+
 #
 #
 # class ProducGetViewSet(viewsets.ModelViewSet):
@@ -183,16 +186,36 @@ class ClientViewSet(viewsets.ModelViewSet):
         return JsonResponse('Error al Registrar', safe=False)
 
 
-class ProductsViewSet(viewsets.ModelViewSet):
-    serializer_class = ProductsSerializer
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        """Create respoNse and add message"""
+        response = super(CategoryViewSet, self).create(request, *args, **kwargs)
+        response.data['message'] = "Categoria ha sido creada"
+        return response
+
+    def perform_create(self, serializer):
+        """Create new Category"""
+        serializer.save(code=code())
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
     def create(self, request, *args, **kwargs):
-        # response = super(ProductsViewSet, self).create(request, *args, **kwargs)
-        # response.data['message'] = "producto ha sido creado"
-        return JsonResponse('Creado Exitosamente', safe=False)
+        """Create response and add message"""
+        response = super(ProductViewSet, self).create(request, *args, **kwargs)
+        response.data['message'] = "Producto ha sido creado"
+        return response
 
     def perform_create(self, serializer):
         """Create new product"""
         serializer.save(code=code())
 
+
+class ProviderViewSet(viewsets.ModelViewSet):
+    serializer_class = ProviderSerializer
+    queryset = Provider.objects.all()

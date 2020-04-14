@@ -9,7 +9,9 @@ router = DefaultRouter()
 # router.register(r'getClient', views.ClientGetViewSet, basename='getClient')
 # router.register(r'addClient', views.ClientViewSet, basename='addClient')
 # router.register(r'addProduct', views.ProductViewSet, basename='addProduct')
-router.register('product', views.ProductsViewSet)
+router.register('product', views.ProductViewSet)
+router.register('category', views.CategoryViewSet)
+router.register('provider', views.ProviderViewSet)
 
 app_name = 'apis'
 
