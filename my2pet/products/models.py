@@ -1,7 +1,7 @@
 from django.db import models
 
 from categories.models import Category
-
+from providers.models import Provider
 from my2pet.helpers import code
 
 
@@ -10,7 +10,8 @@ class Product(models.Model):
     code = models.CharField(max_length=3, blank=True)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     reference = models.CharField(max_length=15, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='branch')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
+    provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, null=True, related_name='products')
     # image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(max_length=500, blank=True)
     created = models.DateTimeField(auto_now_add=True)
