@@ -49,18 +49,20 @@ class PublicProductApis(TestCase):
 
     def test_creating_product(self):
         """Test that products are created"""
-        category = Category.objects.create(name='pets')
+        category = Category.objects.create(title='pets')
+        provider = Provider.objects.create(company='new_company', phone=234567, phoneProvider=123456,)
         payload = {
             'name': 'prod1',
             'price': 10.00,
             'category': category.id,
+            'provider': provider.id,
             'reference': 'REF',
             'description': 'DESCRIPTION'
         }
         res = self.client.post(PRODUCT_URL, payload)
         exists = Product.objects.filter(name='prod1',
                                         price=10.00,
-                                        category=category, ).exists()
+                                        category=category,).exists()
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['message'], "Producto ha sido creado")
@@ -87,8 +89,8 @@ class PublicProductApis(TestCase):
 
     def test_retrieving_categories(self):
         """Test that categories are retrieved"""
-        Category.objects.create(name='personal care')
-        Category.objects.create(name='pets care')
+        Category.objects.create(title='personal care')
+        Category.objects.create(title='pets care')
 
         res = self.client.get(CATEGORY_URL)
 
@@ -100,17 +102,17 @@ class PublicProductApis(TestCase):
 
     def test_creating_category(self):
         """Test that category can be created"""
-        payload = {'name': 'pets'}
+        payload = {'title': 'pets'}
         res = self.client.post(CATEGORY_URL, payload)
 
-        exists = Category.objects.filter(name=payload['name']).exists()
+        exists = Category.objects.filter(title=payload['title']).exists()
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(exists)
 
     def test_retrieving_category_detail(self):
         """Test that name is retrieved for category"""
-        category = Category.objects.create(name='pets')
+        category = Category.objects.create(title='pets')
         url = detail_category_url(category.id)
         res = self.client.get(url)
 
@@ -119,8 +121,8 @@ class PublicProductApis(TestCase):
 
     def test_retrieving_providers(self):
         """Test retrieving a list of providers"""
-        Provider.objects.create(company='company', phone=12345567)
-        Provider.objects.create(company='company2', phone=7654321)
+        Provider.objects.create(company='company', phone=12345567, phoneProvider=122345)
+        Provider.objects.create(company='company2', phone=7654321, phoneProvider=122345)
 
         res = self.client.get(PROVIDER_URL)
 
@@ -135,6 +137,7 @@ class PublicProductApis(TestCase):
         payload = {
             'company': 'new_company',
             'phone': 1234567,
+            'phoneProvider': 123456,
         }
         res = self.client.post(PROVIDER_URL, payload)
 

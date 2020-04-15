@@ -3,12 +3,12 @@ from django.db import models
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=40)
+    title = models.CharField(max_length=40)
     code = models.CharField(max_length=5)
 
     def __str__(self):
         """String representation"""
-        return self.name
+        return self.title
 
     def codi(self):
         letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
