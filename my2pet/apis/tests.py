@@ -24,6 +24,10 @@ def detail_category_url(category_id):
     return reverse('apis:category-detail', args=[category_id])
 
 
+def detail_provider_url(provider_id):
+    return reverse('apis:provider-detail', args=[provider_id])
+
+
 class PublicProductApis(TestCase):
     """Test the public apis for Product"""
 
@@ -146,3 +150,20 @@ class PublicProductApis(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(exists)
+
+    def test_updating_provider(self):
+        """Test provider is updated and message is returned"""
+        provider = Provider.objects.create(company='company',
+                                           phone=1234567,
+                                           phoneProvider=1234567)
+        payload = {
+            'company': 'new_company',
+            'phone': 7654321,
+            'phoneProvider': 765431,
+        }
+        url = detail_provider_url(provider.id)
+        res = self.client.put(url, payload)
+        provider.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['message'], "Proveedor ha sido editado")
+        self.assertEqual(provider.company, payload['company'])

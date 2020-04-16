@@ -200,6 +200,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
         """Create new Category"""
         serializer.save(code=code())
 
+    def update(self, request, *args, **kwargs):
+        """Update response and add message"""
+        response = super(CategoryViewSet).update(self, request, *args, *kwargs)
+        response.data['message'] = "Categoria ha sido editada"
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
@@ -215,7 +220,24 @@ class ProductViewSet(viewsets.ModelViewSet):
         """Create new product"""
         serializer.save(code=code())
 
+    def update(self, request, *args, **kwargs):
+        """update response and add message"""
+        response = super(ProductViewSet, self).update(request, *args, **kwargs)
+        response.data['message'] = "Producto ha sido editado"
+
 
 class ProviderViewSet(viewsets.ModelViewSet):
     serializer_class = ProviderSerializer
     queryset = Provider.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        """Create response and add message"""
+        response = super(ProviderViewSet, self).create(request, *args, **kwargs)
+        response.data['message'] = "Provedor ha sido creado"
+        return response
+
+    def update(self, request, *args, **kwargs):
+        """Update response and add message"""
+        response = super(ProviderViewSet, self).update(request, *args, **kwargs)
+        response.data['message'] = "Proveedor ha sido editado"
+        return response
