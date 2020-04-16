@@ -35,3 +35,4 @@ class ProductDetails(models.Model):
     delivery = models.BooleanField(default=False)
     discount = models.CharField(max_length=50)
     quantity = models.IntegerField()
+    observations = models.CharField(max_length=255, blank=True)

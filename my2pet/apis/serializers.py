@@ -52,4 +52,4 @@ class ProviderSerializer(serializers.ModelSerializer):
         model = Provider
         fields = ('id', 'company', 'phone', 'email',
                   'address', 'userProvider', 'phoneProvider',
-                  'emailProvider', 'observationProduct')
+                  'emailProvider', 'observations')
