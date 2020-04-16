@@ -9,6 +9,7 @@ class Provider(models.Model):
     userProvider = models.CharField(max_length=255, blank=True)
     phoneProvider = models.BigIntegerField(blank=True)
     emailProvider = models.EmailField(max_length=255, blank=True)
+    observationProduct = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.company

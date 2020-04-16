@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('name', 'price', 'reference', 'category', 'provider', 'description')
+        fields = ('id', 'name', 'price', 'reference', 'category', 'provider', 'description')
 
 
 class ProviderSerializer(serializers.ModelSerializer):
@@ -50,4 +50,6 @@ class ProviderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Provider
-        fields = ('company', 'phone', 'email', 'address', 'userProvider', 'phoneProvider', 'emailProvider')
+        fields = ('id', 'company', 'phone', 'email',
+                  'address', 'userProvider', 'phoneProvider',
+                  'emailProvider', 'observationProduct')

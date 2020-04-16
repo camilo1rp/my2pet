@@ -167,3 +167,17 @@ class PublicProductApis(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['message'], "Proveedor ha sido editado")
         self.assertEqual(provider.company, payload['company'])
+
+    def test_deleting_provider(self):
+        """Test that provider is deleted"""
+        provider = Provider.objects.create(company='company',
+                                           phone=1234567,
+                                           phoneProvider=1234567)
+
+        url = detail_provider_url(provider.id)
+        res = self.client.delete(url)
+
+        providers = Provider.objects.all()
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(providers), 0)

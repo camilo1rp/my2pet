@@ -205,6 +205,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
         response = super(CategoryViewSet).update(self, request, *args, *kwargs)
         response.data['message'] = "Categoria ha sido editada"
 
+    def destroy(self, request, *args, **kwargs):
+        """delete provider and return message """
+        response = super(CategoryViewSet, self).destroy(request, *args, **kwargs)
+        response.data = {'message': 'Proveedor ha sido eliminado'}
+        return response
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
@@ -225,6 +230,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         response = super(ProductViewSet, self).update(request, *args, **kwargs)
         response.data['message'] = "Producto ha sido editado"
 
+    def destroy(self, request, *args, **kwargs):
+        """delete provider and return message """
+        response = super(ProductViewSet, self).destroy(request, *args, **kwargs)
+        response.data = {'message': 'Proveedor ha sido eliminado'}
+        return response
 
 class ProviderViewSet(viewsets.ModelViewSet):
     serializer_class = ProviderSerializer
@@ -240,4 +250,10 @@ class ProviderViewSet(viewsets.ModelViewSet):
         """Update response and add message"""
         response = super(ProviderViewSet, self).update(request, *args, **kwargs)
         response.data['message'] = "Proveedor ha sido editado"
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        """delete provider and return message """
+        response = super(ProviderViewSet, self).destroy(request, *args, **kwargs)
+        response.data = {'message': 'Proveedor ha sido eliminado'}
         return response
