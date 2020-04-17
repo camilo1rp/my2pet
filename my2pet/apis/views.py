@@ -208,7 +208,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         """delete provider and return message """
         response = super(CategoryViewSet, self).destroy(request, *args, **kwargs)
-        response.data = {'message': 'Proveedor ha sido eliminado'}
+        response.data = {'message': 'Categoria ha sido eliminada'}
         return response
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -233,7 +233,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         """delete provider and return message """
         response = super(ProductViewSet, self).destroy(request, *args, **kwargs)
-        response.data = {'message': 'Proveedor ha sido eliminado'}
+        response.data = {'message': 'Producto ha sido eliminado'}
         return response
 
 class ProviderViewSet(viewsets.ModelViewSet):
