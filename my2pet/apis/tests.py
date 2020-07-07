@@ -11,9 +11,15 @@ from categories.models import Category
 from products.models import Product
 from providers.models import Provider
 
+CREATE_USER_URL = reverse('apis:user-create')
+
 PRODUCT_URL = reverse('apis:product-list')
 CATEGORY_URL = reverse('apis:category-list')
 PROVIDER_URL = reverse('apis:provider-list')
+
+
+def create_user(**params):
+    return get_user_model().objects.create_user(**params)
 
 
 def detail_url(product_id):
@@ -28,12 +34,53 @@ def detail_provider_url(provider_id):
     return reverse('apis:provider-detail', args=[provider_id])
 
 
+class PublicUserApiTests(TestCase):
+    """Test the user API public"""
+
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_create_valid_user_success(self):
+        """Test creating user with valid payload is successful"""
+        payload = {
+            'email': 'test@testing.com',
+            'password': 'testpass',
+            'name': 'Test name',
+        }
+        res = self.client.post(CREATE_USER_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        user = get_user_model().objects.get(**res.data)
+        self.assertTrue(user.check_password(payload['password']))
+        self.assertNotIn('password', res.data)
+
+    def test_user_exists(self):
+        """Test that creating existing user fails"""
+        payload = {'email': 'test@testing.com', 'password': 'pass1234'}
+        create_user(**payload)
+
+        res = self.client.post(CREATE_USER_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_password_too_short(self):
+        """Test that password is longer than 5 characters"""
+        payload = {'email': 'test@testing.com', 'password': 'pw', 'name': 'Test',}
+        res = self.client.post(CREATE_USER_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        user_exists = get_user_model().objects.filter(
+            email=payload['email']).exists()
+
+        self.assertFalse(user_exists)
+
+
 class PublicProductApis(TestCase):
     """Test the public apis for Product"""
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user(username='test',
+        self.user = get_user_model().objects.create_user(name='test',
                                                          email='test@testing.com',
                                                          password='passtest123', )
         self.client.force_authenticate(self.user)
@@ -54,7 +101,7 @@ class PublicProductApis(TestCase):
     def test_creating_product(self):
         """Test that products are created"""
         category = Category.objects.create(title='pets')
-        provider = Provider.objects.create(company='new_company', phone=234567, phoneProvider=123456,)
+        provider = Provider.objects.create(company='new_company', phone=234567, phoneProvider=123456, )
         payload = {
             'name': 'prod1',
             'price': 10.00,
@@ -66,7 +113,7 @@ class PublicProductApis(TestCase):
         res = self.client.post(PRODUCT_URL, payload)
         exists = Product.objects.filter(name='prod1',
                                         price=10.00,
-                                        category=category,).exists()
+                                        category=category, ).exists()
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(res.data['message'], "Producto ha sido creado")

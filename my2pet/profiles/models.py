@@ -1,5 +1,5 @@
 import random
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -9,7 +9,7 @@ from categories.models import Category
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     code = models.CharField(_('code'), max_length=5, null=True, blank=True)
     company = models.CharField(_('company'), max_length=30, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='categories',
@@ -32,19 +32,19 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance).save()
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
 class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     dob = models.CharField(max_length=20, default='', blank=True)
     address = models.CharField( max_length=100, default='', blank=True)
     id_type = models.CharField( max_length=100, default='', blank=True)
@@ -52,11 +52,11 @@ class Client(models.Model):
     phone = models.BigIntegerField(blank=True, null=True)
     is_client = models.BooleanField(default=False, null=True)
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def create_user_client(sender, instance, created, **kwargs):
     if created:
         Client.objects.create(user=instance).save()
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def save_user_client(sender, instance, **kwargs):
     instance.client.save()

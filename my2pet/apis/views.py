@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 
-from rest_framework import viewsets, status, mixins
+from rest_framework import generics, viewsets, status, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -14,29 +14,39 @@ from categories.models import Category
 from products.models import Product
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+class CreateUserView(generics.CreateAPIView):
+    """Create a new user in the db"""
     serializer_class = UserSerializer
 
-    def list(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            email = request.GET.get('email')
-            password = request.GET.get('password')
-            company = request.GET.get('company')
-            cat_id = request.GET.get('category')
-            serializer = UserSerializer(data={'username': company, 'email': email, 'password': password})
-            if serializer.is_valid():
-                us = serializer.save()
-                try:
-                    cat = Category.objects.get(id=cat_id)
-                    us.profile.category = cat
-                except:
-                    return JsonResponse('***Category does not exist ****', safe=False)
-                us.profile.company = company
-                us.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return JsonResponse('***Error al Registrar ****', safe=False)
+    def create(self, request, *args, **kwargs):
+        """Create respoNse and add message"""
+        response = super(CreateUserView, self).create(request, *args, **kwargs)
+        response.data['message'] = "Registrado Exitosamente"
+        return response
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def list(self, request, *args, **kwargs):
+#         if request.method == 'GET':
+#             email = request.GET.get('email')
+#             password = request.GET.get('password')
+#             company = request.GET.get('company')
+#             cat_id = request.GET.get('category')
+#             serializer = UserSerializer(data={'username': company, 'email': email, 'password': password})
+#             if serializer.is_valid():
+#                 us = serializer.save()
+#                 try:
+#                     cat = Category.objects.get(id=cat_id)
+#                     us.profile.category = cat
+#                 except:
+#                     return JsonResponse('***Category does not exist ****', safe=False)
+#                 us.profile.company = company
+#                 us.save()
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return JsonResponse('***Error al Registrar ****', safe=False)
 
 
 class ClientGetViewSet(viewsets.ModelViewSet):
@@ -211,6 +221,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         response.data = {'message': 'Categoria ha sido eliminada'}
         return response
 
+
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
@@ -235,6 +246,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         response = super(ProductViewSet, self).destroy(request, *args, **kwargs)
         response.data = {'message': 'Producto ha sido eliminado'}
         return response
+
 
 class ProviderViewSet(viewsets.ModelViewSet):
     serializer_class = ProviderSerializer

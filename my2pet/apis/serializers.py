@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from categories.models import Category
@@ -7,18 +7,23 @@ from providers.models import Provider
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for user"""
+    """Serializer for Users administrators"""
 
     class Meta:
-        model = User
-        fields = ('username', 'password', 'email')
+        model = get_user_model()
+        fields = ('name', 'password', 'email')
+        extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
+
+    def create(self, validated_data):
+        """create a new user with encrypted password and return it"""
+        return get_user_model().objects.create_user(**validated_data)
 
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer for client"""
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('username', 'password', 'email', 'first_name', 'last_name')
 
 
