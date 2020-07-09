@@ -34,5 +34,6 @@ app_name = 'apis'
 urlpatterns = [
     path('', DocsView.as_view()),
     path('', include(router.urls)),
-    path('user_create/', views.CreateUserView.as_view(), name='user-create')
+    path('user_create/', views.CreateUserView.as_view(), name='user-create'),
+    path('login/', views.CreateTokenView.as_view(), name='login')
 ]

@@ -2,13 +2,17 @@ from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 
 from rest_framework import generics, viewsets, status, mixins
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 from my2pet.helpers import code
 from providers.models import Provider
-from .serializers import UserSerializer, ClientSerializer, ProductSerializer, CategorySerializer, ProviderSerializer
+from .serializers import UserSerializer, ClientSerializer, ProductSerializer, CategorySerializer, ProviderSerializer, \
+    AuthTokenSerializer
 from categories.models import Category
 
 from products.models import Product
@@ -23,6 +27,12 @@ class CreateUserView(generics.CreateAPIView):
         response = super(CreateUserView, self).create(request, *args, **kwargs)
         response.data['message'] = "Registrado Exitosamente"
         return response
+
+
+class CreateTokenView(ObtainAuthToken):
+    """Create a new token for user"""
+    serializer_class = AuthTokenSerializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 # class UserViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
